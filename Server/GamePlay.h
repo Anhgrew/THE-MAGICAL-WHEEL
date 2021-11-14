@@ -1,6 +1,5 @@
 #pragma once
 
-
 #ifndef GamePlay_h_
 #define GamePlay_h_
 
@@ -13,6 +12,7 @@
 class GamePlay
 {
 public:
+    
     int keyword_list_size;
     std::fstream file;
 

@@ -19,6 +19,57 @@ std::vector<Keyword*> FileReader::getListKeyWord()
     return list_keyword;
 }
 
+std::string FileReader::registrationOrLogin(std::string name)
+{
+    if (name.size() > 10) {
+        return "Name is too long !";
+    }
+    else if (checkExistingUser(name)) {
+        return "Existed name. Please chose another name !";
+    }
+    else {
+        int id;
+        file.open("size.txt", std::ios::in);
+        file >> id;
+        file.close();      
+       
+        file.open("size.txt", std::ios::out);
+        id++;
+        file << id;
+        file.close();
+      
+        file.open("users.txt", std::ios_base::app);
+        if (!file.is_open())
+        {
+            std::cout << "WRONG FILE NAME OR FILE IS NOT EXISTING IN THE PROJECT!!!" << std::endl;
+            exit(0);
+        }
+        User* user = new User(id,name, -1);    
+        file << user->id << std::endl;
+        file << user->name << std::endl;
+        file << user->score << std::endl;
+
+        return "Registration Completed Successfully !";
+    }
+}
+
+bool FileReader::checkExistingUser(std::string name)
+{
+    std::string id, user_name, score_string;
+    while (!file.eof()) {
+        getline(file, id);
+        getline(file, user_name);
+        getline(file, score_string);
+        transform(user_name.begin(), user_name.end(), user_name.begin(), ::tolower);
+        transform(name.begin(), name.end(), name.begin(), ::tolower);
+        if (name.compare(user_name) == 0) {
+            return true;
+        }
+    }
+    file.close();
+    return false;
+}
+
 void FileReader::tokenize(std::string const& str, const char delim, std::vector<std::string>& out)
 {
     size_t start;

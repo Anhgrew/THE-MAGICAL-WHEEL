@@ -144,6 +144,7 @@
     <ClInclude Include="GamePlay.h" />
     <ClInclude Include="Keyword.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="User.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FileReader.cpp" />
@@ -151,9 +152,12 @@
     <ClCompile Include="Keyword.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Server.cpp" />
+    <ClCompile Include="User.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="database.txt" />
+    <Text Include="size.txt" />
+    <Text Include="users.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

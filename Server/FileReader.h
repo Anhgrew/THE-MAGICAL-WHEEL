@@ -5,11 +5,13 @@
 #define FileReader_h_
 
 #include"Keyword.h"
+#include"User.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <algorithm>
 #include<vector>
+
 
 class FileReader
 {
@@ -41,6 +43,10 @@ public:
     }
 
     std::vector<Keyword*> getListKeyWord();
+
+    std::string registrationOrLogin(std::string name);
+
+    bool checkExistingUser(std::string name);
 
     void tokenize(std::string const& str, const char delim, std::vector<std::string>& out);
 

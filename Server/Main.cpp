@@ -112,17 +112,24 @@ void ProcessNewRequest() {
 }
 
 int main()
-{				  
+{			
+	// Create keyword for game turn
 	srand((int)time(0));
 	FileReader* file = new FileReader("database.txt", ios::in);
 	vector<Keyword*> keyword_list = file->getListKeyWord();
-	file->~FileReader();
-
+	file->~FileReader();  
 
 	Keyword* selected_keyword = keyword_list[rand() % keyword_list.size()];
 	std::cout << selected_keyword->keyword << " + " << selected_keyword->description << std::endl;
-	
 
+	//Create new name of connected user => must change to send mess to user
+	string name = "Anhgrew111";
+	FileReader* user_file = new FileReader("users.txt", ios::in);
+	string registration_message = user_file->registrationOrLogin(name);
+	cout << registration_message << endl;
+	
+	
+	
 	WSADATA ws;
 
 	// DWORD thread;	//Kết quả trả về của thread
