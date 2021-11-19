@@ -44,8 +44,6 @@ public:
 
     std::vector<Keyword*> getListKeyWord();
 
-    std::string registrationOrLogin(std::string name);
-
     bool checkExistingUser(std::string name);
 
     void tokenize(std::string const& str, const char delim, std::vector<std::string>& out);

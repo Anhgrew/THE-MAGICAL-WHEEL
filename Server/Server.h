@@ -1,57 +1,71 @@
-﻿#pragma once
+#pragma once
+
+#ifndef Server_h_
+#define Server_h_
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <stdio.h>
-#include <string.h>
+#include <sstream>  
 #include <string>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <conio.h>
-#include <windows.h>
-#include <vector>
-//#include "User.h"
-//#include "CParam.h"
-#include <stdlib.h>
+#include <winsock.h>
+#include <algorithm>
+#include<vector>
+#include"FileReader.h"
+#include"User.h"
 
-#pragma comment (lib, "Ws2_32.lib")
+class Server
+{
+public:
+	struct sockaddr_in receiver;
+	WSADATA ws;
+	int N;
+	SOCKET socket_receiver = INVALID_SOCKET;
+	std::vector<int>clients;
+	std::vector<User*> users;
+	int current_appearances = 0;
+	std::vector<Keyword*> keyword_list;
+	std::vector<User*> queue;
+	Keyword* keyword;
+	int PORT;
+	fd_set fr, fw, fe;
+	bool full = false;
+	bool start = false;	
+	bool start_receive_ans = false;
+	bool game_end = false;
+	bool start_new_game = false;
+	std::string winner;
 
-#include <fstream>
-#define BYTE_CHUNK 4096
-#define FILE_LIMIT 209715200
-#define HEADER_SIZE 4
+	Server(int n, int port, SOCKET socket = INVALID_SOCKET,  int current_appears = 0) {
+		N = n;
+		PORT = port;
+		clients.resize(n);
+		current_appearances = current_appears;
+		socket_receiver = socket;  
+	}
 
-////Kiểm tra login thành công hay không
-////Ret 1: thành công
-////Ret 0: lỗi hoặc nhập sai tên hay mật khẩu
-////Ret 2: account đang được sử dụng
-////Trả về username sẽ là tên tk của client đó
-//int checkLogIn(SOCKET client, ListUser& list, string& username);
-//
-////Kiểm tra signup thành công hay không
-////Ret 1: thành công
-////Ret -1: lỗi 
-//int checkSignUp(SOCKET client, ListUser& list, string& username);
-//
-////Hàm xử lí gửi file (upload)
-////Ret -1: lỗi
-////Ret 1 thành công
-////Ret 2: file quá lớn
-//int FileSend(SOCKET socket, string filename);
-//
-////Hàm nhận file (download)
-////Ret -1: lỗi
-////Ret 1: thành công
-//int FileRecv(SOCKET socket, string& file);
-//
-//void RedrawScreen();
-//
-//int GetFileList(string filename, vector <string>& output);
-//
-//void InsertStrToFile(string str, string filename);
-//
-//bool CheckDuplicate(vector <string> filelist, string filename);
-//
-//
-//int sendMsg(SOCKET socket, string msg);
-//int recvMsg(SOCKET socket, char*& buf);
+	~Server() {
+		closesocket(socket_receiver);
+		WSACleanup();
+	}
+
+
+
+	void initiateServer();
+
+	void setKeyWordList(std::vector<Keyword*> keywords);
+
+	void setKeyWord(Keyword* keyword);
+
+	std::vector<std::string> split(std::string s, std::string delimiter);
+
+	std::string isExistingUser(std::string name, int client_socket);
+
+	void ProcessNewMessage(int client_socket);
+
+	void ProcessNewRequest();
+
+	void ProcessUsers(char buffer[256], int client_socket);
+
+};
+
+#endif // !Server_h_

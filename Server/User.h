@@ -7,28 +7,31 @@
 #include <algorithm>
 #include<vector>
 
+
 class User
 {
 public:
     int id;
+    static int current_id;
+    int socket_id;
     std::string name;
     std::string status;     // success, miss, win, lose
     std::string ans;        // answer 1 character
-    std::string final_ans;  // answer whole keyword
-    int mode;               // mode of answer (0 = character, 1 =  whole keyword)
-    int score;
+    bool final_ans = false; // answer whole keyword
+    std::string mode;               // mode of answer ('0' = character, '1' =  whole keyword)
+    int score = 0;
     bool turn = false;    // current turn
     int rank;
+  
 
+    User(): id(current_id++) {}
 
-    User(int id, std::string name, int score) {
-        this->id = id;
+    User(std::string name, int score) {
         this->name = name;
         this->score = score;
     }
 
-    User(int id, std::string name, std::string status, std::string ans, std::string final_ans, int mode, int score, bool turn, int rank) {
-        this->id = id;
+    User(std::string name, std::string status, std::string ans, int final_ans, int mode, int score, bool turn, int rank) {
         this->name = name;
         this->status = status;
         this->ans = ans;
@@ -42,5 +45,6 @@ public:
     void printUser();
 
 };
+
 
 #endif // !User_h_

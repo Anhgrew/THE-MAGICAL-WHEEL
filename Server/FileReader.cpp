@@ -19,39 +19,6 @@ std::vector<Keyword*> FileReader::getListKeyWord()
     return list_keyword;
 }
 
-std::string FileReader::registrationOrLogin(std::string name)
-{
-    if (name.size() > 10) {
-        return "Name is too long !";
-    }
-    else if (checkExistingUser(name)) {
-        return "Existed name. Please chose another name !";
-    }
-    else {
-        int id;
-        file.open("size.txt", std::ios::in);
-        file >> id;
-        file.close();      
-       
-        file.open("size.txt", std::ios::out);
-        id++;
-        file << id;
-        file.close();
-      
-        file.open("users.txt", std::ios_base::app);
-        if (!file.is_open())
-        {
-            std::cout << "WRONG FILE NAME OR FILE IS NOT EXISTING IN THE PROJECT!!!" << std::endl;
-            exit(0);
-        }
-        User* user = new User(id,name, -1);    
-        file << user->id << std::endl;
-        file << user->name << std::endl;
-        file << user->score << std::endl;
-
-        return "Registration Completed Successfully !";
-    }
-}
 
 bool FileReader::checkExistingUser(std::string name)
 {
