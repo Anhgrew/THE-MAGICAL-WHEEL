@@ -26,6 +26,7 @@ public:
 	std::vector<Keyword*> keyword_list;
 	std::vector<User*> queue;
 	Keyword* keyword;
+	Keyword* hint;
 	int PORT;
 	fd_set fr, fw, fe;
 	bool full = false;
