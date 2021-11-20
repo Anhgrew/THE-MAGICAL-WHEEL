@@ -9,6 +9,7 @@
 #include "afxdialogex.h"
 #include "ClientScreen.h"
 #include "LogNoti.h"
+#include "CCLientPlayGround.h"
 #include <cstring>
 #include <string>
 #include <iostream>
@@ -341,8 +342,11 @@ void CGiaoDienClientSocketDlg::OnBnClickedRegister()
 		int nRet = 3.0;
 		// Send to new dialog if registrate success
 		EndDialog(nRet);
-		LogNoti noti;
-		noti.DoModal();
+		//LogNoti noti;
+		//noti.DoModal();
+		CCLientPlayGround playground;
+		playground.DoModal();
+
 	}
 	else if (string(receive_buffer).compare("Name is longer than 10 character. Please input again !") == 0) {
 		MessageBox(_T("Name is longer than 10 character. Please input again !"));
