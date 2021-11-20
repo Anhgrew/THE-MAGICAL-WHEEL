@@ -45,6 +45,7 @@ BOOL CCLientPlayGround::OnInitDialog() {
 	} else {
 		txtKeyWord.SetReadOnly(FALSE);
 	}*/
+	return TRUE;
 }
 
 // CCLientPlayGround message handlers
@@ -81,7 +82,7 @@ void CCLientPlayGround::OnBnClickedSendanswer()
 	listPlayGround.SetCurSel(listPlayGround.GetCount() - 1);
 
 	//// Show Score
-	int score;
+	int score = 10;
 	CString sc;
 	sc.Format(_T("%d"), score);
 	txtScore.SetWindowTextW(sc);
