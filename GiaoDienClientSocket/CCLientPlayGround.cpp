@@ -37,7 +37,27 @@ END_MESSAGE_MAP()
 
 BOOL CCLientPlayGround::OnInitDialog() {
 	// Init if required, can add later
+	GetDlgItem(IDC_SENDANSWER)->EnableWindow(FALSE);
 
+	char receive_buffer1[256] = { 0, };
+	std::vector<std::string> res;
+
+	if (recv(nSocket, receive_buffer1, 256, 0) == -1) {
+		MessageBox(_T("Can not receive"));
+	}
+	else {
+		res = split(receive_buffer1, ",");
+		index = 0;
+
+		if (res.size() > 0 && res[2].compare("Your turn") == 0) {
+			GetDlgItem(IDC_SENDANSWER)->EnableWindow(TRUE);
+		}
+		else {
+
+			MessageBox(_T("Please wait for your turn..."));
+		}
+
+	}
 
 	//set readonly when turn < 2
 	/*if (num_turn < 2) {
@@ -53,6 +73,56 @@ BOOL CCLientPlayGround::OnInitDialog() {
 
 void CCLientPlayGround::OnBnClickedSendanswer()
 {
+
+	char receive_buffer1[256] = { 0, };
+	std::vector<std::string> res;
+
+
+
+
+
+	if (recv(nSocket, receive_buffer1, 256, 0) == -1) {
+		MessageBox(_T("Can not receive"));
+	}
+	else {
+		res = split(receive_buffer1, ",");
+		index = 0;
+		if (res[0].compare("Let's start")) {
+			/*		des = res[2];
+					name = res[4];
+					score = res[5];*/
+			if (res.size() > 0 && res[6].compare("Your turn") == 0) {
+				GetDlgItem(IDC_SENDANSWER)->EnableWindow(TRUE);
+			}
+			else {
+				MessageBox(_T("Please wait for your turn..."));
+			}
+		}
+		else {
+			MessageBox(_T("Please wait ..."));
+		}
+	}
+
+
+	//if (turn.compare("Your turn") == 0) {
+	//	std::cout << "Input:" << std::endl;
+	//	/*getline(std::cin, send_buffer);
+	//	send_buffer.append(",").append("1");
+	//	send(nSocket, send_buffer.c_str(), 256, 0);
+	//	cout << "Sended.." << endl;*/
+	//}
+
+	/*else {
+		if (res.size() >= 8 && res[7] != "" && res[7].find("Lost") != std::string::npos) {
+			cout << "Wait..." << endl;
+			break;
+		}
+		if (res.size() >= 8 && res[7] != "" && res[7].find("Congratulations") != std::string::npos) {
+			cout << "~~~ You win. End game ~~~" << endl;
+			break;
+		}
+	}*/
+
 	// TODO: Add your control notification handler code here
 	CString responseMsg;
 	CString guessW;
@@ -88,6 +158,19 @@ void CCLientPlayGround::OnBnClickedSendanswer()
 	txtScore.SetWindowTextW(sc);
 
 	//Handle when user make wrong guess word/wrong keyword
+
+}
+
+std::vector<std::string> CCLientPlayGround::split(std::string s, std::string delimiter)
+{
+	std::vector<std::string> res;
+	int last = 0; int next = 0;
+	while ((next = s.find(delimiter, last)) != std::string::npos) {
+		res.push_back(s.substr(last, next - last));
+		last = next + 1;
+	}
+	res.push_back(s.substr(last));
+	return res;
 
 }
 

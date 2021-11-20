@@ -225,7 +225,6 @@ void CGiaoDienClientSocketDlg::OnBnClickedConnect()
 	}
 	else {
 		char receive_buffer[256] = { 0 };
-		string send_buffer;
 		recv(nSocket, receive_buffer, 255, 0);
 		if (string(receive_buffer).compare("full") == 0) {
 			MessageBox(_T("Full queue. Please wait"));
@@ -323,8 +322,7 @@ void CGiaoDienClientSocketDlg::OnBnClickedRegister()
 	CString name;
 	GetDlgItemText(IDC_UserName, name);
 	std::string name_string = CStringA(name);
-	/*CT2CA cv(name);*/
-	string send_buffer;
+
 
 	send(nSocket, name_string.c_str(), 256, 0);
 
@@ -345,6 +343,12 @@ void CGiaoDienClientSocketDlg::OnBnClickedRegister()
 		//LogNoti noti;
 		//noti.DoModal();
 		CCLientPlayGround playground;
+		playground.w = w;
+		playground.res = res;
+		playground.nSocket = nSocket;
+		playground.srv = srv;
+		playground.index = index;
+		
 		playground.DoModal();
 
 	}

@@ -61,6 +61,7 @@ public:
 	int res = 0;
 	int nSocket;
 	sockaddr_in srv;
+	int index;
 
 public:
 	afx_msg void OnBnClickedSend();
