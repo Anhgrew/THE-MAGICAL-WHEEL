@@ -42,6 +42,12 @@
     <ClInclude Include="LogNoti.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CCLientPlayGround.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSummarize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GiaoDienClientSocket.cpp">
@@ -60,6 +66,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="LogNoti.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CCLientPlayGround.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSummarize.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
