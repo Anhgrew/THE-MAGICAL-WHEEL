@@ -30,6 +30,8 @@
 #define IDC_UserName                    1015
 #define IDC_GUESSWORD                   1016
 #define IDC_KEYWORD                     1017
+#define IDC_EDIT1                       1018
+#define IDC_CLNAME                      1018
 
 // Next default values for new objects
 // 
@@ -37,7 +39,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        142
 #define _APS_NEXT_COMMAND_VALUE         32771
-#define _APS_NEXT_CONTROL_VALUE         1017
+#define _APS_NEXT_CONTROL_VALUE         1019
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

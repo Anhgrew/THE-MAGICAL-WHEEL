@@ -28,6 +28,7 @@ void CCLientPlayGround::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_GUESSWORD, txtGuessWord);
 	DDX_Control(pDX, IDC_KEYWORD, txtKeyWord);
 	DDX_Control(pDX, IDC_SCORE, txtScore);
+	DDX_Control(pDX, IDC_CLNAME, txtClientName);
 }
 
 
@@ -45,6 +46,7 @@ BOOL CCLientPlayGround::OnInitDialog() {
 	} else {
 		txtKeyWord.SetReadOnly(FALSE);
 	}*/
+	txtClientName.SetWindowTextW(_T("VINH"));
 	return TRUE;
 }
 
