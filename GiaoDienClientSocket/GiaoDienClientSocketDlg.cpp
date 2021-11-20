@@ -69,10 +69,6 @@ void CGiaoDienClientSocketDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_IP, txtIP);
 	DDX_Control(pDX, IDC_Port, userName);
-	//DDX_Control(pDX, IDC_LIST1, listUserLog);
-	//DDX_Control(pDX, IDC_EDIT2, txtMsg);
-	//DDX_Text(pDX, IDC_EDIT1, mIpAddress);
-	//DDX_Text(pDX, IDC_EDIT3, mPort);
 }
 
 BEGIN_MESSAGE_MAP(CGiaoDienClientSocketDlg, CDialogEx)
@@ -117,6 +113,8 @@ BOOL CGiaoDienClientSocketDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	GetDlgItem(IDC_UserName)->EnableWindow(FALSE);
+	GetDlgItem(BTN_REGISTER)->EnableWindow(FALSE);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -190,30 +188,10 @@ void CGiaoDienClientSocketDlg::OnBnClickedSend()
 }
 
 
-
-
 void CGiaoDienClientSocketDlg::OnBnClickedConnect()
 {
 	// TODO: Add your control notification handler code here
 	txtIP.GetWindowText(mIpAddress);
-
-	//if (AfxSocketInit() == FALSE)
-	//{
-	//	MessageBox(_T("Init socket failed!"));
-	//	return;
-	//}
-
-	//if (mClientSocket.Create() == FALSE)
-	//{
-	//	MessageBox(_T("Socket create failed!"));
-	//	return;
-	//}
-
-	//if (mClientSocket.Connect(mIpAddress, 9090) == FALSE)
-	//{
-	//	MessageBox(_T("Socket connect failed!"));
-	//	return;
-	//}
 
 	std::string server_ip_string = CStringA(mIpAddress);
 	// Init socket
@@ -221,15 +199,13 @@ void CGiaoDienClientSocketDlg::OnBnClickedConnect()
 	res = WSAStartup(MAKEWORD(2, 2), &w);
 	if (res < 0)
 	{
-		printf("\nCannot Initialize socket lib");
+		MessageBox(_T("Cannot initialize listener socket lib"));
 	}
 	//Open a socket - listener
-	int nSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+	nSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (nSocket < 0)
 	{
-		//errno is a system global variable which gets updated
-		//with the last API call return value/result.
-		printf("\nCannot Initialize listener socket:%d", errno);
+		MessageBox(_T("Cannot initialize listener socket"));
 	}
 
 	srv.sin_family = AF_INET;
@@ -240,62 +216,39 @@ void CGiaoDienClientSocketDlg::OnBnClickedConnect()
 	u_long optval = 0;
 
 	res = ioctlsocket(nSocket, FIONBIO, &optval);
+	res = connect(nSocket, (struct sockaddr*)&srv, sizeof(srv));
 	if (res < 0)
 	{
-		printf("\nCannot connect to server:%d", errno);
-		
+		MessageBox(_T("Cannot initialize connect socket server"));
 		WSACleanup();
 	}
 	else {
-		
-		printf("Connect to server\n");
 		char receive_buffer[256] = { 0 };
 		string send_buffer;
 		recv(nSocket, receive_buffer, 255, 0);
-		//std::cout << "press any key to see the message from server ";
-		//getchar();
 		if (string(receive_buffer).compare("full") == 0) {
-			cout << "Full queue!!!" << endl;
-			getchar();
-			cout << "Press any key to exit" << endl;
+			MessageBox(_T("Full queue. Please wait"));
 			WSACleanup();
-			exit(EXIT_FAILURE);
 		}
-		cout << endl << receive_buffer << endl;
+		else {
+			MessageBox(_T("Connect successfully"));
+			GetDlgItem(BTN_CONNECT)->EnableWindow(FALSE);
+			GetDlgItem(IDC_IP)->EnableWindow(FALSE);
+		}
 
 		int index = 0;
 
 
+		GetDlgItem(IDC_UserName)->EnableWindow(TRUE);
+		GetDlgItem(BTN_REGISTER)->EnableWindow(TRUE);
+
+
 		// Name input
-		CString name;
+		/*CString name;
 		GetDlgItemText(IDC_UserName, name);
-		std::string name_string = CStringA(name);
+		std::string name_string = CStringA(name);*/
 
-		while (1) {
-
-			if (recv(nSocket, receive_buffer, 256, 0) == -1) {
-				break;
-			}
-			cout << endl << receive_buffer << endl;
-			if (string(receive_buffer).compare("full") == 0) {
-				cout << "Full queue!!!" << endl;
-				// Message
-				cout << "Press any key to exit" << endl;
-				Sleep(3000);
-				WSACleanup();
-				exit(EXIT_FAILURE);
-			}
-			else if (string(receive_buffer).compare("Registration Completed Successfully") == 0) {
-				// Message
-				break;
-			}
-			send(nSocket, name_string.c_str(), 256, 0);
-		}
-
-		char receive_buffer1[256] = { 0, };
-		vector<string> res;
-		send_buffer = "";
-
+		
 
 		/*	while (1) {
 
@@ -333,10 +286,6 @@ void CGiaoDienClientSocketDlg::OnBnClickedConnect()
 
 		*/
 		//MessageBox(textInput);
-
-		CString mess;
-		mess.Format(_T("Socket connect sucessfull with username %s"), name_string);
-		MessageBox(mess);
 		mClientSocket.SetSocketListener(this);
 	}
 }
@@ -369,9 +318,32 @@ void CGiaoDienClientSocketDlg::OnRecept(CString message)
 void CGiaoDienClientSocketDlg::OnBnClickedRegister()
 {
 	// TODO: Add your control notification handler code here
-	LogNoti noti;
+	// Name input
+	CString name;
+	GetDlgItemText(IDC_UserName, name);
+	std::string name_string = CStringA(name);
+	/*CT2CA cv(name);*/
+	string send_buffer;
 
-	noti.DoModal();
+	send(nSocket, name_string.c_str(), 256, 0);
+
+	if (recv(nSocket, receive_buffer, 256, 0) == -1) {
+		MessageBox(_T("No response"));
+	}
+	else if (string(receive_buffer).compare("full") == 0) {
+		MessageBox(_T("Full queue !!! "));
+		WSACleanup();
+	}
+	else if (string(receive_buffer).compare("Registration Completed Successfully") == 0) {
+		// Message
+		MessageBox(_T("Registration Completed Successfully"));
+	}
+	else if (string(receive_buffer).compare("Name is longer than 10 character. Please input again !") == 0) {
+		MessageBox(_T("Name is longer than 10 character. Please input again !"));
+	}
+	else if (string(receive_buffer).compare("Existed Name. Please input again !") == 0) {
+		MessageBox(_T("Existed Name. Please input again !"));
+	}
 }
 
 
@@ -382,45 +354,3 @@ void CGiaoDienClientSocketDlg::CloseAllButtons()
 	GetDlgItem(BTN_REGISTER)->EnableWindow(FALSE);
 	GetDlgItem(BTN_REFRESH)->EnableWindow(FALSE);
 }
-
-//thread để check xem server có bị disconnect không
-//DWORD WINAPI CheckServer(LPVOID socket) {
-//	SOCKET server = (SOCKET)socket;
-//	int iResult;
-//	char buf[2];
-//
-//	while (1) {
-//		iResult = recv(server, buf, 2, MSG_PEEK);
-//		if (iResult == 0 || iResult == SOCKET_ERROR) {
-//			//MessageBox(_T("Server disconnected!"), _T("Server disconnected!"), MB_OK | NULL);
-//			//CloseAllButtons();
-//			//ServerNotiDlg notif;
-//			//notif.DoModal();
-//			return 0;
-//		}
-//	}
-//	return 0;
-//}
-
-//DWORD WINAPI ReceiveLog(LPVOID socket) {
-//
-//	SOCKET notiSocket = (SOCKET)socket;
-//
-//	int iResult;
-//	char* buf;
-//
-//	while (1) {
-//		iResult = recvMsg(notiSocket, buf);
-//		if (iResult == 0 || iResult == SOCKET_ERROR) {
-//			return 0;
-//		}
-//		//pop up window
-//
-//		string noti(buf);
-//		LogNoti logWindow;
-//		logWindow.text = noti;
-//		logWindow.DoModal();
-//		strcpy(buf, "");
-//	}
-//	return 0;
-//}

@@ -51,8 +51,9 @@ public:
 	CListBox listUserLog;
 	CStatic txtTest;
 	CStatic staticLoginResult;
-
 	SOCKET server;
+
+	char receive_buffer[256] = { 0 };
 
 	///
 

@@ -214,7 +214,7 @@ void Server:: ProcessNewMessage(int client_socket) {
 		if (users.size() < N) {
 			std::cout << "Message recieved from client " << buffer << endl;
 			std::string message = isExistingUser(buffer, client_socket);
-			
+			cout << ">>>>>>>>>>" << message << "<<<<<<<<<<<<<<" << users.size() <<  endl;
 			send(client_socket, message.c_str(), 70, 0);
 			cout << endl << "**********************************";
 		}
@@ -261,6 +261,9 @@ void Server:: ProcessNewMessage(int client_socket) {
 			
 
 		}
+		if (users.size() > N) {
+
+		}
 
 
 	}
@@ -275,6 +278,7 @@ void Server::setKeyWord(Keyword* keyword)
 
 
 void Server::ProcessNewRequest() {
+	cout << "aaaaa->>>>" << current_appearances << endl;
 
 	if (FD_ISSET(socket_receiver, &fr)) {
 		current_appearances++;
@@ -288,9 +292,6 @@ void Server::ProcessNewRequest() {
 					if (clients[i] == 0) {
 						clients[i] = client_socket;
 						cout << " -------> " << client_socket << endl;
-						send(client_socket, "Got connected !!!\n", 18, 0);
-						send(client_socket, "Please enter your name: \n", 26, 0);
-						
 						break;
 					}
 					else {
@@ -310,8 +311,6 @@ void Server::ProcessNewRequest() {
 					if (clients[i] == 0) {
 						clients[i] = client_socket;
 						cout << " -------> " << client_socket << endl;
-						send(client_socket, "Got connected !!!\n", 18, 0);
-						send(client_socket, "Please enter your name: \n", 26, 0);
 						break;
 					}
 				}
@@ -323,7 +322,7 @@ void Server::ProcessNewRequest() {
 			current_appearances--;
 			int len = sizeof(struct sockaddr);
 			int client_socket = accept(socket_receiver, NULL, &len);
-			send(client_socket, "full", 5, 0);
+			/*send(client_socket, "full", 5, 0);*/
 			closesocket(client_socket);
 			cout << "Users limit exceed, So we rejected socket: " << client_socket << endl;
 		}
@@ -550,7 +549,7 @@ string Server::isExistingUser(std::string name, int client_socket)
 		return "Name is longer than 10 character. Please input again !";
 	}
 	for (auto user : users) {
-		if (user->name == name) {
+		if (user->name.compare(name) == 0) {
 			return "Existed Name. Please input again !";
 		}
 	}
