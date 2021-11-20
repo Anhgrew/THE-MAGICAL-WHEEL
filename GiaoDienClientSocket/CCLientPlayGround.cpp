@@ -59,7 +59,7 @@ void CCLientPlayGround::OnBnClickedSendanswer()
 	CString keyW;
 
 	txtGuessWord.GetWindowTextW(guessW);
-	txtKeyWord, GetWindowTextW(keyW);
+	txtKeyWord.GetWindowTextW(keyW);
 
 	//Send response to Server, with format: keyword,guessword
 	responseMsg = keyW + "," + guessW;
