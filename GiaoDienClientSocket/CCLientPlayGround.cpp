@@ -69,7 +69,7 @@ void CCLientPlayGround::OnBnClickedSendanswer()
 	//->send to server
 
 	txtGuessWord.SetWindowTextW(_T(""));
-	txtGuessWord.SetWindowTextW(_T(""));
+	txtKeyWord.SetWindowTextW(_T(""));
 
 	//Receive from Server
 
