@@ -336,7 +336,13 @@ void CGiaoDienClientSocketDlg::OnBnClickedRegister()
 	}
 	else if (string(receive_buffer).compare("Registration Completed Successfully") == 0) {
 		// Message
+		
 		MessageBox(_T("Registration Completed Successfully"));
+		int nRet = 3.0;
+		// Send to new dialog if registrate success
+		EndDialog(nRet);
+		LogNoti noti;
+		noti.DoModal();
 	}
 	else if (string(receive_buffer).compare("Name is longer than 10 character. Please input again !") == 0) {
 		MessageBox(_T("Name is longer than 10 character. Please input again !"));
