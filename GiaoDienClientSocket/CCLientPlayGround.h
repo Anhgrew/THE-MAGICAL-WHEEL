@@ -39,4 +39,5 @@ public:
 	std::vector< std::vector<std::string> > records;
 
 	std::string disWord;
+	CEdit txtClientName;
 };

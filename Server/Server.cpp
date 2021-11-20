@@ -16,7 +16,7 @@ void Server::initiateServer()
 	// config socket address
 	memset(&receiver, 0, sizeof(receiver));		//Initialize sockaddr
 	receiver.sin_family = AF_INET;			//Server IP's type = IPv4
-	receiver.sin_addr.s_addr = INADDR_ANY;	//Can connect to any interface
+	receiver.sin_addr.s_addr = inet_addr("127.0.0.1");	//Can connect to any interface
 	receiver.sin_port = htons(9090);			//The port number is 9090
 
 	// config socket
